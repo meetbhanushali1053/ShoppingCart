@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% load cart %}
+{% load custom_filter %}
+<div class="container">
+   <div class="border rounded p-4 m-4">
+        <p class="display-4 pl-4 ml-4">Your Cart</p>
+        <hr>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sno.</th>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for product in products %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td><img style="height: 80px;" class="rounded-circle" src="{{product.image.url}}" alt=""></td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.price|currency}}</td>
+                    <td>{{product|cart_quantity:request.session.cart}}</td>
+                    <td>{{product|price_total:request.session.cart|currency}}</td>
+                </tr>
+
+                {% endfor %}
+               
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <th colspan="4"></th>
+                    <th class="" colspan="">Total</th>
+                    <th>{{products|total_cart_price:request.session.cart|currency}}</th>
+                </tr>
+            </tfoot>
+        </table>
+        <hr>
+        <div class="m-3 p-3">
+         
+            <a href="#" data-toggle="modal" data-target="#exampleModal" class="btn btn-outline-info border rounded  col-lg-3 float-right">Check out</a>
+        </div>
+   </div>
+</div>
+
+
+<!-- modal -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+              Check Out Form
+          </h5>
+          <hr>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+          <div class="m-2 p-3">
+            <form id="paymentForm" method="POST">
+              {% csrf_token %}
+              <div class="form-group">
+                  <label for="address">Address</label>
+                  <input type="text" name="address" id="address" class="form-control" placeholder="" aria-describedby="helpId">
+              </div>
+              <div class="form-group">
+                  <label for="phone">Phone</label>
+                  <input type="text" name="phone" id="phone" class="form-control" placeholder="" aria-describedby="helpId">
+              </div>
+              <div class="form-group">
+                  <label for="product">Select Product</label>
+                  <select name="product" id="product" class="form-control">
+                      <option value="product1">...select product</option>
+                      <option value="product1">iphone14 pro max</option>
+                      <option value="product2">Asus ROG</option>
+                      <option value="product3">instax 12 mini</option>
+                      <option value="product4">Bose Speaker</option>
+                      <option value="product5">Rog Laptop</option>
+                      <option value="product6">Gaming Keyboard</option>
+                      <option value="product7">Heli Drone</option>
+                      <option value="product8">Bang & Olufsen headphones</option>
+                      <option value="product9">Samsung Monitor</option>
+                      <option value="product10">360 degree stnd</option>
+                      <option value="product11">VR Gaming</option>
+                      <option value="product12">iwatch series 9</option>
+                      
+                  </select>
+              </div>
+              <button type="button" id="paymentButton" class="btn float-right btn-outline-info col-lg-6">Payment</button>
+          </form>
+          
+          <script>
+          document.addEventListener("DOMContentLoaded", function() {
+              // Add a click event listener to the "Payment" button
+              document.getElementById("paymentButton").addEventListener("click", function() {
+                  // Get the selected product
+                  const selectedProduct = document.getElementById("product").value;
+          
+                  // Construct the appropriate Stripe payment link based on the selected product
+                  let stripePaymentLink = "";
+                  if (selectedProduct === "product1") {
+                      stripePaymentLink = "https://buy.stripe.com/test_9AQ4h50gofJ1bM46os";
+                  } else if (selectedProduct === "product2") {
+                      stripePaymentLink = "https://buy.stripe.com/test_7sIcNB6EM8gz4jC7sx";
+                  } else if (selectedProduct === "product3") {
+                      stripePaymentLink = "https://buy.stripe.com/test_6oEcNB8MU2Wf17qbIO";
+                  } else if (selectedProduct === "product4") {
+                      stripePaymentLink = "https://buy.stripe.com/test_9AQeVJgfmaoH4jCaEH";
+                  } else if (selectedProduct === "product5") {
+                      stripePaymentLink = "https://buy.stripe.com/test_dR66pdd3a8gz9DW14c";
+                  } else if (selectedProduct === "product6") {
+                      stripePaymentLink = "https://buy.stripe.com/test_9AQ8xl9QY54ndUc7sB";
+                  } else if (selectedProduct === "product7") {
+                      stripePaymentLink = "https://buy.stripe.com/test_8wMdRF2ow54n4jC4gq";
+                  } else if (selectedProduct === "product8") {
+                      stripePaymentLink = "https://buy.stripe.com/test_cN200P6EMdAT6rK4gr";
+                  } else if (selectedProduct === "product9") {
+                      stripePaymentLink = "https://buy.stripe.com/test_14kfZN9QYfJ18zS6oA";
+                  } else if (selectedProduct === "product10") {
+                      stripePaymentLink = "https://buy.stripe.com/test_bIY14Tgfm68raI03cp";
+                  } else if (selectedProduct === "product11") {
+                      stripePaymentLink = "https://buy.stripe.com/test_28o8xld3agN5eYgaES";
+                  } else if (selectedProduct === "product12") {
+                      stripePaymentLink = "https://buy.stripe.com/test_00g7th7IQgN517qeV9";
+                  } 
+          
+                  // Perform a POST request to the backend (if needed)
+          
+                  // Redirect to the constructed Stripe payment link
+                  window.location.href = stripePaymentLink;
+              });
+          });
+          </script>
+          
+          
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}
